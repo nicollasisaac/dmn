@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_0jw30af" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.26.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
+  <decision id="Decision_0g8iuqw" name="Decisão 1: Emitir Nota Fiscal">
+    <informationRequirement id="InformationRequirement_10afe4d">
+      <requiredInput href="#InputData_0mo8hrt" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0bnc4vc">
+      <requiredInput href="#InputData_0f4fkj4" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1xwtm2x" hitPolicy="FIRST">
+      <input id="Input_1" label="Alíquota dos Impostos">
+        <inputExpression id="InputExpression_1" typeRef="boolean">
+          <text>aliquotaConformidade</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0zwb1em" label="Status do Pedido">
+        <inputExpression id="LiteralExpression_0rz9xxm" typeRef="string">
+          <text>statusPedido</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Emitir Nota Fiscal" name="emitirNota" typeRef="boolean" />
+      <rule id="DecisionRule_1657yw4">
+        <description>Emitir nota fiscal</description>
+        <inputEntry id="UnaryTests_16ko551">
+          <text>aliquotaConformidade == true &amp;&amp; statusPedido == "Ativo"	</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0min2qd">
+          <text>statusPedido == "Ativo"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1xj1h9x">
+          <text>emitirNota == true	</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1a00577">
+        <description>Não emitir nota fiscal</description>
+        <inputEntry id="UnaryTests_0cnjfum">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03fbaq6">
+          <text>statusPedido == "Inativo"	</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1s6db7k">
+          <text>emitirNota == false	</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_199lrx2" name="Decisão 2: Comunicação ao Time de Compras">
+    <informationRequirement id="InformationRequirement_114rfy0">
+      <requiredDecision href="#Decision_0g8iuqw" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1trokdd">
+      <requiredInput href="#InputData_0mo8hrt" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1kgcyl1" hitPolicy="FIRST">
+      <input id="InputClause_0jr11b0" label="Status do Pedido ">
+        <inputExpression id="LiteralExpression_0w5wwl2" typeRef="string">
+          <text>statusPedido</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_08l0kog" label="Comunicar Time de Compras " name="comunicarCompras" typeRef="boolean" />
+      <rule id="DecisionRule_1nhmzxi">
+        <description>Comunicar o time de compras</description>
+        <inputEntry id="UnaryTests_135raiv">
+          <text>statusPedido == "Inativo"	</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0w0mnty">
+          <text>comunicarCompras == true	</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0mnj92i">
+        <description>Não comunicar o time de compras</description>
+        <inputEntry id="UnaryTests_0vjs8uz">
+          <text>statusPedido == "Ativo"	</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08qw6j5">
+          <text>comunicarCompras == false	</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0dlf1u9" name="Decisão 3: Aplicação de Alíquota">
+    <informationRequirement id="InformationRequirement_0foav4y">
+      <requiredDecision href="#Decision_0g8iuqw" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1hmouyk">
+      <requiredInput href="#InputData_11g026n" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0z0op2c" hitPolicy="FIRST">
+      <input id="InputClause_0jkof4m" label="Tipo de Compra ">
+        <inputExpression id="LiteralExpression_1khf6lz" typeRef="string">
+          <text>tipoCompra</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0zutcpw" label="Alíquota Aplicada " name="aliquotaAplicada" typeRef="number" />
+      <rule id="DecisionRule_0aoxqwc">
+        <description>Aplicar alíquota padrão (18%)</description>
+        <inputEntry id="UnaryTests_0fk11y2">
+          <text>tipoCompra == "Produto"	</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_15geepe">
+          <text>aliquotaAplicada == 0.18	</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1o6zl40">
+        <description>Aplicar alíquota diferenciada (12%)</description>
+        <inputEntry id="UnaryTests_01917bj">
+          <text>tipoCompra == "Serviço"	</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ul5bo6">
+          <text>aliquotaAplicada == 0.12	</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0zyn1cc">
+        <inputEntry id="UnaryTests_14nqvmy">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04rds1p">
+          <text></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0mo8hrt" name="status do pedido" />
+  <inputData id="InputData_0f4fkj4" name="Alíquota dos Impostos" />
+  <inputData id="InputData_11g026n" name="tipo de compra" />
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_0g8iuqw">
+        <dc:Bounds height="80" width="180" x="450" y="-90" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1bth9qf" dmnElementRef="InformationRequirement_114rfy0">
+        <di:waypoint x="540" y="-10" />
+        <di:waypoint x="480" y="160" />
+        <di:waypoint x="480" y="180" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0eo3jym" dmnElementRef="Decision_199lrx2">
+        <dc:Bounds height="80" width="180" x="420" y="180" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1hhx2jf" dmnElementRef="InformationRequirement_0foav4y">
+        <di:waypoint x="540" y="-10" />
+        <di:waypoint x="300" y="160" />
+        <di:waypoint x="300" y="180" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1nhe58n" dmnElementRef="Decision_0dlf1u9">
+        <dc:Bounds height="80" width="180" x="210" y="180" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_030yzxp" dmnElementRef="InputData_0mo8hrt">
+        <dc:Bounds height="45" width="125" x="557" y="57" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0afxiy0" dmnElementRef="InputData_0f4fkj4">
+        <dc:Bounds height="45" width="125" x="147" y="-73" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1dh8ukd" dmnElementRef="InformationRequirement_10afe4d">
+        <di:waypoint x="620" y="57" />
+        <di:waypoint x="540" y="10" />
+        <di:waypoint x="540" y="-10" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1pa55uo" dmnElementRef="InformationRequirement_0bnc4vc">
+        <di:waypoint x="272" y="-50" />
+        <di:waypoint x="430" y="-50" />
+        <di:waypoint x="450" y="-50" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0fg3xww" dmnElementRef="InputData_11g026n">
+        <dc:Bounds height="45" width="125" x="-12" y="198" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_09w27ly" dmnElementRef="InformationRequirement_1hmouyk">
+        <di:waypoint x="113" y="221" />
+        <di:waypoint x="190" y="220" />
+        <di:waypoint x="210" y="220" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0awm1od" dmnElementRef="InformationRequirement_1trokdd">
+        <di:waypoint x="620" y="102" />
+        <di:waypoint x="540" y="160" />
+        <di:waypoint x="540" y="180" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
