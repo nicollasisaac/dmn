@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_0jw30af" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.26.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="Definitions_0jw30af" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.26.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
   <decision id="Decision_0g8iuqw" name="Decisão 1: Emitir Nota Fiscal">
     <informationRequirement id="InformationRequirement_10afe4d">
       <requiredInput href="#InputData_0mo8hrt" />
@@ -8,7 +8,7 @@
       <requiredInput href="#InputData_0f4fkj4" />
     </informationRequirement>
     <decisionTable id="DecisionTable_1xwtm2x" hitPolicy="FIRST">
-      <input id="Input_1" label="Alíquota dos Impostos">
+      <input id="Input_1" label="Alíquota dos Impostos" biodi:width="192">
         <inputExpression id="InputExpression_1" typeRef="boolean">
           <text>aliquotaConformidade</text>
         </inputExpression>
@@ -34,7 +34,7 @@
       <rule id="DecisionRule_1a00577">
         <description>Não emitir nota fiscal</description>
         <inputEntry id="UnaryTests_0cnjfum">
-          <text>aliquotaConformidade == true &amp;&amp; statusPedido == "Ativo"	</text>
+          <text>aliquotaConformidade == true &amp;&amp; statusPedido == "Inativo"	</text>
         </inputEntry>
         <inputEntry id="UnaryTests_03fbaq6">
           <text>statusPedido == "Inativo"	</text>
@@ -124,13 +124,14 @@
   <inputData id="InputData_0mo8hrt" name="status do pedido" />
   <inputData id="InputData_0f4fkj4" name="Alíquota dos Impostos" />
   <inputData id="InputData_11g026n" name="tipo de compra" />
+  <decision id="Decision_09e444l" />
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
       <dmndi:DMNShape dmnElementRef="Decision_0g8iuqw">
-        <dc:Bounds height="80" width="180" x="450" y="-90" />
+        <dc:Bounds height="80" width="180" x="440" y="-110" />
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="DMNEdge_1bth9qf" dmnElementRef="InformationRequirement_114rfy0">
-        <di:waypoint x="540" y="-10" />
+        <di:waypoint x="530" y="-30" />
         <di:waypoint x="480" y="160" />
         <di:waypoint x="480" y="180" />
       </dmndi:DMNEdge>
@@ -138,7 +139,7 @@
         <dc:Bounds height="80" width="180" x="420" y="180" />
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="DMNEdge_1hhx2jf" dmnElementRef="InformationRequirement_0foav4y">
-        <di:waypoint x="540" y="-10" />
+        <di:waypoint x="530" y="-30" />
         <di:waypoint x="300" y="160" />
         <di:waypoint x="300" y="180" />
       </dmndi:DMNEdge>
@@ -153,13 +154,13 @@
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="DMNEdge_1dh8ukd" dmnElementRef="InformationRequirement_10afe4d">
         <di:waypoint x="620" y="57" />
-        <di:waypoint x="540" y="10" />
-        <di:waypoint x="540" y="-10" />
+        <di:waypoint x="530" y="-10" />
+        <di:waypoint x="530" y="-30" />
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="DMNEdge_1pa55uo" dmnElementRef="InformationRequirement_0bnc4vc">
         <di:waypoint x="272" y="-50" />
-        <di:waypoint x="430" y="-50" />
-        <di:waypoint x="450" y="-50" />
+        <di:waypoint x="420" y="-70" />
+        <di:waypoint x="440" y="-70" />
       </dmndi:DMNEdge>
       <dmndi:DMNShape id="DMNShape_0fg3xww" dmnElementRef="InputData_11g026n">
         <dc:Bounds height="45" width="125" x="-12" y="198" />
@@ -174,6 +175,9 @@
         <di:waypoint x="540" y="160" />
         <di:waypoint x="540" y="180" />
       </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0hppmxr" dmnElementRef="Decision_09e444l">
+        <dc:Bounds height="80" width="180" x="820" y="-120" />
+      </dmndi:DMNShape>
     </dmndi:DMNDiagram>
   </dmndi:DMNDI>
 </definitions>
